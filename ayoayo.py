@@ -15,33 +15,64 @@ def display_board():
     print(f"Player 1: {player_1_holes}")
 
 # Function to redistribute seeds
-def redistribute_seeds(player, hole_index):
-    global player_1_holes, player_2_holes, player_1_bank, player_2_bank
+def redistribute_seeds(player):
+    # Ensure the player number is valid (either 1 or 2)
+    if player not in [1, 2]:
+        print("Invalid player number!")
+        return
     
+    # Determine the player's holes and bank
     if player == 1:
-        seeds = player_1_holes[hole_index]
-        player_1_holes[hole_index] = 0
-        board = player_1_holes + player_2_holes[::-1]
+        holes = player_1_holes
+        opponent_holes = player_2_holes
+        bank = player_1_bank
+        player_name = "Player 1"
     else:
-        seeds = player_2_holes[hole_index]
-        player_2_holes[hole_index] = 0
-        board = player_2_holes + player_1_holes[::-1]
+        holes = player_2_holes
+        opponent_holes = player_1_holes
+        bank = player_2_bank
+        player_name = "Player 2"
+    
+    print(f"\n{player_name}'s turn")
+    display_board()
 
-    for _ in range(seeds):
-        index = (index + 1) % 12
-        if index == 5 and player == 1:  # If Player 1's bank hole
-            player_1_bank += 1
-        elif index == 11 and player == 2:  # If Player 2's bank hole
-            player_2_bank += 1
-        else:
-            board[index] += 1
+    # Ask the player to choose a hole between 1-5, not the bank (hole 0)
+    print(f"Choose a hole (1-5) to redistribute seeds (not hole 0):")
+    hole_index = int(input())
     
-    if player == 1:
-        player_1_holes = board[:6]
-        player_2_holes = board[6:][::-1]
-    else:
-        player_2_holes = board[:6]
-        player_1_holes = board[6:][::-1]
+    # Validate that the hole is between 1 and 5 and not empty
+    while hole_index < 1 or hole_index > 5 or holes[hole_index] == 0:
+        if hole_index == 0:
+            print("You cannot choose the bank (hole 0). Choose a hole between 1-5 that is not empty.")
+        else:
+            print("Invalid choice! Choose a hole between 1-5 that is not empty.")
+        hole_index = int(input())
+
+    seeds = holes[hole_index]
+    holes[hole_index] = 0  # Empty the chosen hole
+    
+    # Combine Player 1's and Player 2's holes for redistribution
+    board = holes + opponent_holes[::-1]  # Reverse Player 2's holes for proper indexing
+    
+    # Redistribute seeds
+    index = hole_index
+    while seeds > 0:
+        index = (index + 1) % 12  # Wrap around the board
+        
+        # Skip the bank (hole 0) during redistribution
+        if index == 0:
+            continue
+
+        # Distribute the seeds
+        if index < 6:  # Player 1's holes
+            player_1_holes[index] += 1
+        else:  # Player 2's holes
+            player_2_holes[index - 6] += 1
+        seeds -= 1
+
+    # Update the board after redistribution
+    player_1_holes = board[:6]
+    player_2_holes = board[6:][::-1]
 
     
     # Display the updated board
