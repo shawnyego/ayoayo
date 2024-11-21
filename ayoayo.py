@@ -4,9 +4,7 @@ player_2_holes = [4, 4, 4, 4, 4, 4]
 player_1_bank = 0  # Player 1's bank (Store)
 player_2_bank = 0  # Player 2's bank (Store)
 
-# Declare bank holes
-player_1_bank_index = None
-player_2_bank_index = None
+
 
 # Function to visualize the board
 def display_board():
@@ -78,9 +76,8 @@ def redistribute_seeds(player):
     # Display the updated board
     display_board()
 
-# Function to declare bank choices
 def declare_banks():
-    global player_1_bank_index, player_2_bank_index
+    global player_1_bank_index
     
     # Player 1's choice of a bank hole
     print("Player 1, choose a hole (0-5) as your bank:")
@@ -89,15 +86,20 @@ def declare_banks():
         print("Invalid choice! Choose a hole between 0 and 5.")
         player_1_bank_index = int(input())
     
-    # Player 2 chooses a bank hole
+    # Display initial bank choice for Player 1
+    print(f"Player 1 has chosen hole {player_1_bank_index} as their bank.")
+    
+    # Player 2 chooses a bank hole (Assuming player 2 selects their bank manually or by another system)
     print("Player 2, choose a hole (0-5) as your bank:")
-    player_2_bank_index = int(input())  
-    while player_2_bank_index < 0 or player_2_bank_index > 5:
-        print("Invalid choice! Choose a hole between 0 and 5.")
+    player_2_bank_index = int(input())
+    while player_2_bank_index < 0 or player_2_bank_index > 5 or player_2_bank_index == player_1_bank_index:
+        if player_2_bank_index == player_1_bank_index:
+            print("Player 2 cannot choose the same hole as Player 1. Choose a different hole.")
+        else:
+            print("Invalid choice! Choose a hole between 0 and 5.")
         player_2_bank_index = int(input())
     
     # Display initial bank choices
-    print(f"Player 1 has chosen hole {player_1_bank_index} as their bank.")
     print(f"Player 2 has chosen hole {player_2_bank_index} as their bank.")
 
 # Function to check if the game has ended
