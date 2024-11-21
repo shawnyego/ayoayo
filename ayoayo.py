@@ -4,7 +4,7 @@ player_2_holes = [4, 4, 4, 4, 4, 4]
 player_1_bank = 0  # Player 1's bank (Store)
 player_2_bank = 0  # Player 2's bank (Store)
 
-
+# Function to declare the banks for each player
 def declare_banks():
     global player_1_bank, player_2_bank
     
@@ -36,6 +36,7 @@ def display_board():
     print(f"Stores: P1 Bank={player_1_bank} P2 Bank={player_2_bank}")
     print(f"Player 1: {player_1_holes}")
 
+# Function to redistribute seeds from the chosen hole
 def redistribute_seeds(player, hole_index):
     global player_1_holes, player_2_holes, player_1_bank, player_2_bank
     # Ensure the player number is valid (either 1 or 2)
@@ -75,7 +76,7 @@ def redistribute_seeds(player, hole_index):
 
     seeds = holes[hole_index]
     holes[hole_index] = 0  # Empty the chosen hole
-# Combine Player 1's and Player 2's holes for redistribution
+    # Combine Player 1's and Player 2's holes for redistribution
     board = holes + opponent_holes[::-1]  # Reverse Player 2's holes for proper indexing
 
     index = hole_index
@@ -100,9 +101,8 @@ def redistribute_seeds(player, hole_index):
     player_1_holes = board[:6]
     player_2_holes = board[6:][::-1]   # Reverse Player 2's holes back to their correct order
 
-# Display the updated board
-display_board()
-
+    # Display the updated board
+    display_board()
 
 # Function to check if the game has ended
 def check_end_game():
@@ -156,5 +156,3 @@ def play_game():
 
 # Start the game
 play_game()
-
-
